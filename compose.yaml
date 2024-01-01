@@ -1,0 +1,77 @@
+services:
+  review-server:
+    build:
+      context: ./review-microservice
+      target: dev
+    environment:
+      - CONN_STR=mongodb://jeffreylimnardy:fusionlab-groupa@review-db:27017/review?authSource=admin&retryWrites=true&w=majority
+    secrets:
+      - conn-string
+    ports:
+      - 3000:3000
+    depends_on:
+      - review-db
+    volumes:
+      - ./review-microservice:/usr/src/app/
+  review-db:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/mongodb_root_username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongodb_root_password
+      # MONGO_USERNAME: jeffreylimnardy
+      # MONGO_PASSWORD: fusionlab-groupa
+      MONGO_INITDB_DATABASE: admin
+      # MONGO_DATABASE: review
+    secrets:
+      - mongodb_root_username
+      - mongodb_root_password
+    ports:
+      - 27017:27017
+    volumes:
+      - ./review-db/review-data:/data/db
+    command: ["mongod", "--auth", "--port", "27017"]
+
+secrets:
+  conn-string:
+    file: ./review-microservice/secrets/conn_str.txt
+  mongodb_root_username:
+    file: ./review-db/secrets/mongodb_root_username.txt
+  mongodb_root_password:
+    file: ./review-db/secrets/mongodb_root_password.txt
+
+
+
+# The commented out section below is an example of how to define a PostgreSQL
+# database that your application can use. `depends_on` tells Docker Compose to
+# start the database before your application. The `db-data` volume persists the
+# database data between container restarts. The `db-password` secret is used
+# to set the database password. You must create `db/password.txt` and add
+# a password of your choosing to it before running `docker-compose up`.
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#   db:
+#     image: postgres
+#     restart: always
+#     user: postgres
+#     secrets:
+#       - db-password
+#     volumes:
+#       - db-data:/var/lib/postgresql/data
+#     environment:
+#       - POSTGRES_DB=example
+#       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+#     expose:
+#       - 5432
+#     healthcheck:
+#       test: [ "CMD", "pg_isready" ]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+# volumes:
+#   db-data:
+# secrets:
+#   db-password:
+#     file: db/password.txt
+
