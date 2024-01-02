@@ -1,5 +1,6 @@
 services:
   review-server:
+    container_name: review-server
     build:
       context: ./review-microservice
       target: dev
@@ -14,6 +15,7 @@ services:
     volumes:
       - ./review-microservice:/usr/src/app/
   review-db:
+    container_name: review-db
     image: mongo:latest
     restart: always
     environment:
