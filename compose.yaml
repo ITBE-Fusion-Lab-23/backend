@@ -1,4 +1,11 @@
 services:
+  mock-frontend:
+    container_name: mock-frontend
+    build:
+      context: ./mock-frontend
+    ports:
+      - 8080:8080
+
   review-server:
     container_name: review-server
     build:
@@ -14,6 +21,7 @@ services:
       - review-db
     volumes:
       - ./review-microservice:/usr/src/app/
+      - /usr/src/app/node_modules
   review-db:
     container_name: review-db
     image: mongo:latest

@@ -129,9 +129,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-#secrets
-secrets
-
 #ignore mock frontend
 mock-frontend
 
