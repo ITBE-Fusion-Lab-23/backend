@@ -133,4 +133,4 @@ dist
 mock-frontend
 
 #ignore database
-review-db
+review-data
