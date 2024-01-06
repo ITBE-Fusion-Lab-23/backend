@@ -46,7 +46,7 @@ app.post('/reviews', (req,res) => {
         rating: req.body.rating,
         comment: req.body.comment,
         date: Date.now(),
-        ifcGroup: req.body.ifcGroup
+        bridgePart: req.body.bridgePart
     })
     review.save().then(result => {
         console.log(result);

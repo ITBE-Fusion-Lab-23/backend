@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>This is a simple mock frontend to display the comment functionality</h1>
+    <form action="http://localhost:3000/reviews" method="post">
+        <label for="email">Enter your email here*</label>
+        <fieldset>
+            <input id="email" name="email" type="email" /> 
+        </fieldset>
+        <label for="ageGroup">Your age group</label>
+        <fieldset>
+            <legend>Age Group 1: 10-29, Age Group 2: 30-49, Age Group 3: 50-69, Age Group 4: 70-99, Age Group 5: 100-119</legend>
+            <label><input type="radio" name="ageGroup" value="1" /></label>
+            <label><input type="radio" name="ageGroup" value="2" /></label>
+            <label><input type="radio" name="ageGroup" value="3" /></label>
+            <label><input type="radio" name="ageGroup" value="4" /></label>
+            <label><input type="radio" name="ageGroup" value="5" /></label>
+        </fieldset>
+        <label for="rating">Rating</label>
+        <fieldset>
+            <legend>Rating (1 - 5)</legend>
+            <label><input type="radio" name="rating" value="1" /></label>
+            <label><input type="radio" name="rating" value="2" /></label>
+            <label><input type="radio" name="rating" value="3" /></label>
+            <label><input type="radio" name="rating" value="4" /></label>
+            <label><input type="radio" name="rating" value="5" /></label>
+        </fieldset>
+        <label for="comment">Comment</label>
+        <fieldset>
+            <textarea id="comment" name="comment">This is where you put your comment</textarea>
+        </fieldset>
+        <button>Submit!</button>
+    </form>
+</body>
+</html>

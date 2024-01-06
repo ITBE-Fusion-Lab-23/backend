@@ -129,8 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-#ignore mock frontend
-mock-frontend
-
 #ignore database
 review-data

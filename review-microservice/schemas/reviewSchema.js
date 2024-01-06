@@ -24,7 +24,7 @@ export const reviewSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    ifcGroup: {
+    bridgePart: {
         type: String, //change to objectID later
         require: true
     }
