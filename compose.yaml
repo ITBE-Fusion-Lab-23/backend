@@ -12,7 +12,7 @@ services:
       context: ./review-microservice
       target: dev
     environment:
-      - CONN_STR=mongodb://jeffreylimnardy:fusionlab-groupa@review-db:27017/review?authSource=admin&retryWrites=true&w=majority
+      - CONN_STR=mongodb://fusionlab-groupa:fuslabgroupa2023@review-db:27017/review?authSource=admin&retryWrites=true&w=majority
     secrets:
       - conn-string
     ports:
