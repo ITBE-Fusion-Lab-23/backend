@@ -1,4 +1,9 @@
+version: "3.8"
+
 services:
+  ###################################################################################
+  #backend repo
+  ###################################################################################
   mock-frontend:
     container_name: mock-frontend
     build:
@@ -42,6 +47,80 @@ services:
       - ./review-db/review-data:/data/db
     command: ["mongod", "--auth", "--port", "27017"]
 
+
+  ###################################################################################
+  #3dcitydb repo
+  ###################################################################################
+
+  3d-city-db:
+    image: "3dcitydb/3dcitydb-pg:latest"
+    container_name: 3d-city-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    user: root
+    environment:
+      SRID: 32632
+      POSTGRES_PASSWORD: FusionLab
+    volumes:
+      - ./3dcitydb/pg-data/:/var/lib/postgresql/data
+
+  #Import/Export service that has to be started for every operation
+  #Import GML File into 3D City DB:
+  #docker compose run -it --rm impexp import 688_5334.gml
+  #Export Visualisation for 3D City objects:
+  #docker compose run -it --rm impexp export-vis -o 688_5334.kml -j -D collada -l 2 -O globe -G --gltf-binary --gltf-embed-textures
+  impexp:
+    image: "3dcitydb/impexp:latest"
+    container_name: impexp
+    restart: no
+    environment:
+      CITYDB_TYPE: postgresql
+      CITYDB_HOST: 3d-city-db
+      CITYDB_PORT: 5432
+      CITYDB_NAME: postgres
+      CITYDB_USERNAME: postgres
+      CITYDB_PASSWORD: FusionLab
+    volumes:
+      - ./3dcitydb/CityGMLData/:/data
+
+  #3D City DB's web ui with map and everything
+  #For thematic data, data has to be linked with Add/Configure Layer
+  # Example:
+      #URL: rightclick MASTERjson in data for copy link
+      #ThematicDataUrl: http://localhost:5433/fusionlab_building_view
+      #Thematic Data Source: PostgreSQL REST API
+      #See View_SQL View has to be created in 3dcitydb that connects the tables and shows the relevant info
+      #MaxCoutnOfVisibleTiles for best performance in large dataset
+  #Scene Link:
+  #http://localhost:8000/3dwebclient/?t=3DCityDB-Web-Map-Client&s=false&ts=0&la=48.138711&lo=11.530144&h=128.008&hd=32.18&p=-14.47&r=0.11&l_0=u%3Dhttp%253A%252F%252Flocalhost%253A8000%252Fdata%252FExistingBridge%252FExistingBridge_collada_MasterJSON.json%26n%3DExistingBridge%26ld%3DCOLLADA%252FKML%252FglTF%26lp%3Dfalse%26lc%3Dtrue%26gv%3D2.0%26a%3Dtrue%26tdu%3Dhttp%253A%252F%252Flocalhost%253A5433%252Ffusionlab_building_view%26ds%3DPostgreSQL%26tt%3DHorizontal%26gc%3D%26il%3D0%26al%3D1.7976931348623157e%252B10%26ac%3D200%26av%3D200&l_1=u%3Dhttp%253A%252F%252Flocalhost%253A8000%252Fdata%252FBuildings%252F688_5334_collada_MasterJSON.json%26n%3DBuildings%26ld%3DCOLLADA%252FKML%252FglTF%26lp%3Dfalse%26lc%3Dtrue%26gv%3D2.0%26a%3Dtrue%26tdu%3Dhttp%253A%252F%252Flocalhost%253A5433%252Ffusionlab_building_view%26ds%3DPostgreSQL%26tt%3DHorizontal%26gc%3D%26il%3D0%26al%3D1.7976931348623157e%252B10%26ac%3D200%26av%3D200&sw=showOnStart%3Dfalse
+  web-client:
+    image: "tumgis/3dcitydb-web-map:latest"
+    # build: .
+    container_name: web-client
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./3dcitydb/CityGMLData/:/var/www/data/
+
+  #REST API for 3d City DB to host thamtic data locally
+  #Custom View has to be created to create one endpoint for all objects in one Cesium Scene
+  #SQL Command to create the view at: ./View_SQL.txt
+  postgrest:
+    image: "postgrest/postgrest"
+    container_name: postgrest
+    restart: no
+    ports:
+      - "5433:3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres:FusionLab@3d-city-db:5432/postgres
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:5433
+      PGRST_DB_SCHEMA: citydb
+      PGRST_DB_ANON_ROLE: postgres
+    depends_on:
+      - 3d-city-db
+
 secrets:
   conn-string:
     file: ./review-microservice/secrets/conn_str.txt
@@ -49,39 +128,3 @@ secrets:
     file: ./review-db/secrets/mongodb_root_username.txt
   mongodb_root_password:
     file: ./review-db/secrets/mongodb_root_password.txt
-
-
-
-# The commented out section below is an example of how to define a PostgreSQL
-# database that your application can use. `depends_on` tells Docker Compose to
-# start the database before your application. The `db-data` volume persists the
-# database data between container restarts. The `db-password` secret is used
-# to set the database password. You must create `db/password.txt` and add
-# a password of your choosing to it before running `docker-compose up`.
-#     depends_on:
-#       db:
-#         condition: service_healthy
-#   db:
-#     image: postgres
-#     restart: always
-#     user: postgres
-#     secrets:
-#       - db-password
-#     volumes:
-#       - db-data:/var/lib/postgresql/data
-#     environment:
-#       - POSTGRES_DB=example
-#       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-#     expose:
-#       - 5432
-#     healthcheck:
-#       test: [ "CMD", "pg_isready" ]
-#       interval: 10s
-#       timeout: 5s
-#       retries: 5
-# volumes:
-#   db-data:
-# secrets:
-#   db-password:
-#     file: db/password.txt
-

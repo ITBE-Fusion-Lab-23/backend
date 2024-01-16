@@ -139,5 +139,3 @@ app.listen(3000, (err) => {
     ? console.log("Error in server setup.")
     : console.log("Server listening on Port", 3000);
 });
-
-module.exports(app);
