@@ -10,15 +10,15 @@ const ModelGroupSchema = new Schema({
         type: String,
         require:true,
         enum: ['A','B','C','D','E'],
+        unique: true
     },
-    bridgePart: {
-        type: String,
-        require: true,
-        enum: ['Arches','Walkways','Bicycle lanes','Bus stops', 'Roads']
-    },
+    votes: {
+        type: Number,
+        default: 0
+    }
 })
 
-ModelGroupSchema.index({modelGroup: 1, bridgePart: 1}, {unique:true});
+// ModelGroupSchema.index({modelGroup: 1, bridgePart: 1}, {unique:true});
 
 export const ModelGroupModel = mongoose.model('ModelGroup',ModelGroupSchema);
 
@@ -30,7 +30,6 @@ export const ModelGroupModel = mongoose.model('ModelGroup',ModelGroupSchema);
  *      type: object
  *      required:
  *        - modelGroup
- *        - bridgePart
  *      properties:
  *        id:
  *          type: string
@@ -39,8 +38,8 @@ export const ModelGroupModel = mongoose.model('ModelGroup',ModelGroupSchema);
  *          type: string
  *          enum: [A, B, C, D, E]
  *          description: The group name which owns the IFC model.
- *        bridgePart:
- *          type: string
- *          enum: [Arches, Walkways, Bicycle lanes, Bus stops, Roads]
- *          description: The bridge part which the IFC model consists of
+ *        votes:
+ *          type: number
+ *          default: 0
+ *          description: The number of votes a model gets.
  */
