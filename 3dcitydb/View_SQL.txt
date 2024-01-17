@@ -1,0 +1,46 @@
+DROP VIEW IF EXISTS fusionlab_building_view;
+CREATE VIEW citydb.fusionlab_building_view AS
+SELECT
+    co.gmlid AS GMLID,
+    b.function AS function,
+    b.roof_type AS roof_type,
+    a.gmlid AS address_gmlid,
+    a.street AS street,
+    a.city AS city,
+    a.country AS country
+FROM
+    cityobject co
+    LEFT JOIN building b ON co.id = b.id
+    LEFT JOIN address_to_building atb ON co.id = atb.building_id
+    LEFT JOIN address a ON atb.address_id = a.id;
+
+
+DROP VIEW IF EXISTS fusionlab_bridge_view;
+SELECT
+    co.gmlid AS GMLID,
+    b.function AS function,
+    b.usage AS usage,
+    a.gmlid AS address_gmlid,
+    a.street AS street,
+    a.zip_code AS zip_code,
+    a.city AS city,
+    a.state as state,
+    a.country AS country
+FROM
+    cityobject co
+    LEFT JOIN bridge b ON co.id = b.id
+    LEFT JOIN address_to_bridge atb ON co.id = atb.bridge_id
+    LEFT JOIN address a ON atb.address_id = a.id;
+
+
+DROP VIEW IF EXISTS fusionlab_bridge_constr_element_view;
+SELECT
+    bceco.gmlid AS GMLID,
+    bce.function AS function,
+    bce.usage AS usage,
+    bco.gmlid AS bridge_gmlid
+FROM
+    cityobject bceco
+    LEFT JOIN bridge_contr_element bce ON co.id = bce.id
+    LEFT JOIN bridge b ON bce.bridge_id = b.id
+    LEFT JOIN cityobject bco ON b.id = bco.id;
