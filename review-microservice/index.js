@@ -2,13 +2,14 @@ import express from "express";
 import mongoose, { model } from "mongoose";
 import { ReviewModel } from "./schemas/ReviewSchema.js";
 import bodyParser from "body-parser";
-import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 import { auth } from "express-openid-connect";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { ModelGroupModel } from "./schemas/ModelSchema.js";
 import { options, auth0Config } from "./config.js";
+import modelGroupRouter from "./routes/modelGroup.js";
+import reviewRouter from "./routes/reviews.js";
 
 const specs = swaggerJSDoc(options);
 
@@ -58,64 +59,68 @@ app.get("/callback", (_, res) => {
   res.send("Login worked!");
 });
 
+app.use("/reviews", reviewRouter);
+
+app.use("/modelGroup", modelGroupRouter);
+
 //Get reviews based on modelGroup
-app.get("/reviews/:modelGroup", (req, res) => {
-  ModelGroupModel.findOne({ modelGroup: req.params.modelGroup }).then(
-    (tempresult) => {
-      ReviewModel.find({ modelGroupId: tempresult._id })
-        .populate("modelGroupId")
-        .then((result) => {
-          res.send(result);
-        });
-    }
-  );
-});
+// app.get("/reviews/:modelGroup", (req, res) => {
+//   ModelGroupModel.findOne({ modelGroup: req.params.modelGroup }).then(
+//     (tempresult) => {
+//       ReviewModel.find({ modelGroupId: tempresult._id })
+//         .populate("modelGroupId")
+//         .then((result) => {
+//           res.send(result);
+//         });
+//     }
+//   );
+// });
 
-app.post(
-  "/reviews/:modelGroup/",
-  [body("comment").not().isEmpty().trim().escape()],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(404).json({ errors: errors.array() });
+// app.post(
+//   "/reviews/:modelGroup",
+//   [body("comment").not().isEmpty().trim().escape()],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty())
+//       return res.status(404).json({ errors: errors.array() });
 
-    let modelGroupId;
-    try {
-      const modelGroup = await ModelGroupModel.findOne({
-        modelGroup: req.params.modelGroup,
-      });
-      if (!modelGroup) {
-        res.status(404).send("No object found with specified model group.");
-      }
-      modelGroupId = modelGroup._id;
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Server error");
-    }
+//     let modelGroupId;
+//     try {
+//       const modelGroup = await ModelGroupModel.findOne({
+//         modelGroup: req.params.modelGroup,
+//       });
+//       if (!modelGroup) {
+//         res.status(404).send("No object found with specified model group.");
+//       }
+//       modelGroupId = modelGroup._id;
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send("Server error");
+//     }
 
-    const review = new ReviewModel({
-      _id: new mongoose.Types.ObjectId(),
-      stakeholder: req.body.stakeholder,
-      rating: req.body.rating,
-      component: req.body.component,
-      comment: req.body.comment,
-      modelGroupId: modelGroupId,
-    });
-    try {
-      const result = await review.save();
-      console.log(result);
-      res.status(201).json({
-        message: "Handling POST request to /reviews",
-        createdReview: result,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({
-        error: err,
-      });
-    }
-  }
-);
+//     const review = new ReviewModel({
+//       _id: new mongoose.Types.ObjectId(),
+//       stakeholder: req.body.stakeholder,
+//       rating: req.body.rating,
+//       component: req.body.component,
+//       comment: req.body.comment,
+//       modelGroupId: modelGroupId,
+//     });
+//     try {
+//       const result = await review.save();
+//       console.log(result);
+//       res.status(201).json({
+//         message: "Handling POST request to /reviews",
+//         createdReview: result,
+//       });
+//     } catch (err) {
+//       console.log(err);
+//       res.status(500).json({
+//         error: err,
+//       });
+//     }
+//   }
+// );
 
 //Add vote to a specific model group
 app.put("/modelGroup/:modelGroup", async (req, res) => {
@@ -139,5 +144,3 @@ app.listen(3000, (err) => {
     ? console.log("Error in server setup.")
     : console.log("Server listening on Port", 3000);
 });
-
-module.exports(app);
