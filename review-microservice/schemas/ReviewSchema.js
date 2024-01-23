@@ -255,6 +255,29 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               type: string
  *               example: No review gound with specified review ID.
  *
+ * /modelGroup/:
+ *   get:
+ *     summary: Get the votes of all modelGroups
+ *     tags: [ModelGroup]
+ *     responses:
+ *       200:
+ *         description: The vote counts of the groups' IFC model.
+ *         content:
+ *           application/json:
+ *             schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/ModelGroup'
+ *       400:
+ *         description: No object found with specified model group and component.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: No model found.
+ *
+ *
+ *
  * /modelGroup/{modelGroup}/vote:
  *   put:
  *     summary: Increments the vote for the specified modelGroup
