@@ -2,6 +2,7 @@ import express from "express";
 import { ModelGroupModel } from "../schemas/ModelSchema.js";
 import { ReviewModel } from "../schemas/ReviewSchema.js";
 import { body, validationResult } from "express-validator";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -37,7 +38,8 @@ router.post(
         modelGroup: req.params.modelGroup,
       });
       if (!modelGroup) {
-        res.status(404).send("No object found with specified model group.");
+        res.status(400).send("No object found with specified model group.");
+        return;
       }
       modelGroupId = modelGroup._id;
     } catch (err) {
@@ -68,5 +70,39 @@ router.post(
     }
   }
 );
+
+router.put("/:reviewId/addLike", async (req, res) => {
+  await ReviewModel.findOneAndUpdate(
+    { _id: new mongoose.Types.ObjectId(req.params.reviewId) },
+    { $inc: { likes: 1 } },
+    { new: true }
+  ).then((result) => {
+    if (!result) {
+      res.status(400).send("No reviews found with specified ID");
+      return;
+    }
+    res.status(200).json({
+      message: "Handling PUT request to /reviews",
+      updatedReview: result,
+    });
+  });
+});
+
+router.put("/:reviewId/removeLike", async (req, res) => {
+  await ReviewModel.findOneAndUpdate(
+    { _id: new mongoose.Types.ObjectId(req.params.reviewId) },
+    { $inc: { likes: -1 } },
+    { new: true }
+  ).then((result) => {
+    if (!result) {
+      res.status(400).send("No reviews found with specified ID");
+      return;
+    }
+    res.status(200).json({
+      message: "Handling PUT request to /reviews",
+      updatedReview: result,
+    });
+  });
+});
 
 export default router;

@@ -10,6 +10,7 @@ import { ModelGroupModel } from "./schemas/ModelSchema.js";
 import { options, auth0Config } from "./config.js";
 import modelGroupRouter from "./routes/modelGroup.js";
 import reviewRouter from "./routes/reviews.js";
+import cors from "cors";
 
 const specs = swaggerJSDoc(options);
 
@@ -25,7 +26,10 @@ const apiLimiter = rateLimit({
 //Use bodyParser middleware to be able to parse request body data and apiLimiter to rate limit API requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(apiLimiter);
+// app.use(apiLimiter);
+
+//add cors
+app.use(cors());
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(auth0Config));
 
@@ -59,7 +63,7 @@ app.get("/callback", (_, res) => {
   res.send("Login worked!");
 });
 
-app.use("/reviews", reviewRouter);
+app.use("/review", reviewRouter);
 
 app.use("/modelGroup", modelGroupRouter);
 
@@ -144,3 +148,5 @@ app.listen(3000, (err) => {
     ? console.log("Error in server setup.")
     : console.log("Server listening on Port", 3000);
 });
+
+export default app;

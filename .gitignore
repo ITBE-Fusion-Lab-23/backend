@@ -137,3 +137,8 @@ review-data
 
 #ignore CityGMLData
 ./3dcitydb/CityGMLData/
+
+#ignore vercel deployment folder
+.vercel
+
+/review-microservice/api

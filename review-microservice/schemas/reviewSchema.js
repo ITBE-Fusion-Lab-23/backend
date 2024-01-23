@@ -14,9 +14,10 @@ export const ReviewSchema = new Schema({
       "Local Resident",
       "Transportation Department",
       "Construction and Engineering Firm",
-      "Financial and Investment Parties",
-      "Public Safety and Heath Departments",
+      "Financial and Investment Party",
+      "Public Safety and Health Department",
       "Commuter",
+      "Other",
     ],
   },
   rating: {
@@ -30,9 +31,9 @@ export const ReviewSchema = new Schema({
     require: true,
     enum: [
       "Overall",
-      "Pedestrian space",
+      "Pedestrian Space",
       "Road",
-      "Access to public transport",
+      "Access to Public Transport",
       "Structure",
     ],
   },
@@ -82,7 +83,7 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *        component:
  *          type: string
  *          description: The component to which the review refers to.
- *          enum: [Overall,Pedestrian space,Road,Access to public transport,Structure]
+ *          enum: [Overall,Pedestrian Space,Road,Access to Public Transport,Structure]
  *        comment:
  *          type: string
  *          description: The comment the user gives for a specific component.
@@ -101,17 +102,17 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
 /**
  * @swagger
  * tags:
- *   - name: Reviews
+ *   - name: Review
  *     description: The reviews managing API
  *   - name: ModelGroup
  *     description: The model managing API
  * /:
  *   get:
  *     summary: Test the base endpoint.
- * /reviews/{modelGroup}:
+ * /review/{modelGroup}:
  *   get:
  *     summary: Get the reviews by modelGroup.
- *     tags: [Reviews]
+ *     tags: [Review]
  *     parameters:
  *       - in: path
  *         name: modelGroup
@@ -130,7 +131,7 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *                $ref: '#/components/schemas/Review'
  *   post:
  *     summary: Post a review based on modelGroup and its component
- *     tags: [Reviews]
+ *     tags: [Review]
  *     parameters:
  *     - in: path
  *       name: modelGroup
@@ -169,11 +170,11 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Handling POST request to /reviews
+ *                   example: Handling POST request to /review
  *                 createdReview:
  *                   type: object
  *                   $ref: '#/components/schemas/Review'
- *       404:
+ *       400:
  *         description: No object found with specified model group and component.
  *         content:
  *           text/plain:
@@ -188,7 +189,73 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               type: string
  *               example: Internal server error.
  *
- * /modelGroup/{modelGroup}:
+ * /review/{reviewId}/addLike:
+ *   put:
+ *     summary: Increments the vote for the specified Review
+ *     tags: [Review]
+ *     parameters:
+ *     - in: path
+ *       name: reviewId
+ *       required: true
+ *       schema:
+ *         type: string
+ *         description: The review ID which the likes should be incremented for.
+ *     responses:
+ *       200:
+ *         description: Successful update of the like count for the specified review ID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Handling PUT request to /review
+ *                 updatedReview:
+ *                   type: object
+ *                   $ref: '#components/schemas/Review'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: No review gound with specified review ID.
+ *
+ * /review/{reviewId}/removeLike:
+ *   put:
+ *     summary: Decrements the vote for the specified Review
+ *     tags: [Review]
+ *     parameters:
+ *     - in: path
+ *       name: reviewId
+ *       required: true
+ *       schema:
+ *         type: string
+ *         description: The review ID which the likes should be decremented for.
+ *     responses:
+ *       200:
+ *         description: Successful update of the like count for the specified review ID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Handling PUT request to /review
+ *                 updatedReview:
+ *                   type: object
+ *                   $ref: '#components/schemas/Review'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: No review gound with specified review ID.
+ *
+ * /modelGroup/{modelGroup}/vote:
  *   put:
  *     summary: Increments the vote for the specified modelGroup
  *     tags: [ModelGroup]
@@ -220,7 +287,6 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *             schema:
  *               type: string
  *               example: No model gound with specified model group
- *
  *
  *
  *
