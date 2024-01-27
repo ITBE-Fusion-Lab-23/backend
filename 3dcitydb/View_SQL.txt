@@ -1,3 +1,5 @@
+Buildings and Existing Bridge
+
 DROP VIEW IF EXISTS fusionlab_building_view;
 CREATE VIEW citydb.fusionlab_building_view AS
 SELECT
@@ -13,6 +15,29 @@ FROM
     LEFT JOIN building b ON co.id = b.id
     LEFT JOIN address_to_building atb ON co.id = atb.building_id
     LEFT JOIN address a ON atb.address_id = a.id;
+
+
+New Bridge
+
+DROP TABLE IF EXISTS fusionlab_bridge;
+CREATE TABLE citydb.fusionlab_bridge ( GMLID TEXT, function INTEGER, usage INTEGER, street TEXT, zip_code INTEGER, city TEXT, state TEXT, country TEXT );
+INSERT INTO citydb.fusionlab_bridge VALUES ( 'UUID_f0ef6b33-e632-4ee2-989b-6f5b3e36c19a', 1010, 1010, 'Landsbergerstr.', 80339, 'Munich', 'Bavaria', 'Germany');
+
+
+Lane Model
+
+DROP VIEW IF EXISTS fusionlab_lanemodel_view;
+CREATE VIEW citydb.fusionlab_lanemodel_view AS
+SELECT
+    co.gmlid AS GMLID,
+    ta.function AS function,
+    ta.usage AS usage,
+    ta.surface_material AS surface_material
+FROM
+    cityobject co
+    LEFT JOIN traffic_area ta ON co.id = ta.id;
+
+
 
 
 DROP VIEW IF EXISTS fusionlab_bridge_view;
