@@ -11,6 +11,9 @@ import { options, auth0Config } from "./config.js";
 import modelGroupRouter from "./routes/modelGroup.js";
 import reviewRouter from "./routes/reviews.js";
 import cors from "cors";
+import helmet from "helmet";
+
+const frontEndIP = 'http://10.162.246.145:5001';
 
 const specs = swaggerJSDoc(options);
 
@@ -29,16 +32,37 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(apiLimiter);
 
 //add cors
-app.use(cors());
+const corsOptions = {
+    origin: frontEndIP,
+    methods: 'GET,PUT,POST',
+    optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
+
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(auth0Config));
 
 // Swagger UI Express middleware for API Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
+app.use(helmet());
+
+// Testing middleware to only allow access to apis when done through frontend IP
+app.use((req,res,next) => {
+  var requestIP = req.get('origin');
+  console.log(requestIP);
+  //check if request is coming from the frontend or from somewhere else
+  if(requestIP == frontEndIP) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 // req.isAuthenticated is provided from the auth router
 app.get("/", (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
+    res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
 });
 
 //Try to connect Mongoose to MongoDB with CONN_STR environment variable
@@ -127,21 +151,21 @@ app.use("/modelGroup", modelGroupRouter);
 // );
 
 //Add vote to a specific model group
-app.put("/modelGroup/:modelGroup", async (req, res) => {
-  await ModelGroupModel.findOneAndUpdate(
-    { modelGroup: req.params.modelGroup },
-    { $inc: { votes: 1 } },
-    { new: true }
-  ).then((result) => {
-    if (!result) {
-      res.status(400).send("No model found with the specified model group.");
-    }
-    res.status(200).json({
-      message: "Handling PUT request to /modelGroup",
-      updatedModelGroup: result,
-    });
-  });
-});
+// app.put("/modelGroup/:modelGroup", async (req, res) => {
+//   await ModelGroupModel.findOneAndUpdate(
+//     { modelGroup: req.params.modelGroup },
+//     { $inc: { votes: 1 } },
+//     { new: true }
+//   ).then((result) => {
+//     if (!result) {
+//       res.status(400).send("No model found with the specified model group.");
+//     }
+//     res.status(200).json({
+//       message: "Handling PUT request to /modelGroup",
+//       updatedModelGroup: result,
+//     });
+//   });
+// });
 
 app.listen(3000, (err) => {
   err
