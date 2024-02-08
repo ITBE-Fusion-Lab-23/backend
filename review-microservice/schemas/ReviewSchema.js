@@ -189,9 +189,9 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               type: string
  *               example: Internal server error.
  *
- * /review/{reviewId}/addLike:
+ * /review/{reviewId}/likes/{operation}:
  *   put:
- *     summary: Increments the vote for the specified Review
+ *     summary: Changes the vote for the specified Review based on the operation specified.
  *     tags: [Review]
  *     parameters:
  *     - in: path
@@ -199,7 +199,14 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *       required: true
  *       schema:
  *         type: string
- *         description: The review ID which the likes should be incremented for.
+ *         description: The review ID which the likes should be changed for.
+ *     - in: path
+ *       name: operation
+ *       required: true
+ *       schema:
+ *         type: string
+ *         enum: ["inc","dec"]
+ *         description: Determines if the likes should be incremented or decremented by 1
  *     responses:
  *       200:
  *         description: Successful update of the like count for the specified review ID.
@@ -222,38 +229,6 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               type: string
  *               example: No review gound with specified review ID.
  *
- * /review/{reviewId}/removeLike:
- *   put:
- *     summary: Decrements the vote for the specified Review
- *     tags: [Review]
- *     parameters:
- *     - in: path
- *       name: reviewId
- *       required: true
- *       schema:
- *         type: string
- *         description: The review ID which the likes should be decremented for.
- *     responses:
- *       200:
- *         description: Successful update of the like count for the specified review ID.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Handling PUT request to /review
- *                 updatedReview:
- *                   type: object
- *                   $ref: '#components/schemas/Review'
- *       400:
- *         description: Bad request
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: No review gound with specified review ID.
  *
  * /modelGroup/:
  *   get:
