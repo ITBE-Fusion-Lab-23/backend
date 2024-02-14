@@ -25,6 +25,19 @@ router.put("/:modelGroup/vote", jwtCheck, async (req, res) => {
 
   try {
     session.startTransaction();
+
+    //checks if user has already voted
+    await UserModel.findOne({ email: userEmail }).then((result) => {
+      if (result.votedModel) {
+        res
+          .status(400)
+          .send({ error: `You have voted for Group ${result.votedModel}` });
+        throw new Error(
+          "User has already voted and cannot change their vote anymore."
+        );
+      }
+    });
+
     await ModelGroupModel.findOneAndUpdate(
       { modelGroup: req.params.modelGroup },
       { $inc: { votes: 1 } },

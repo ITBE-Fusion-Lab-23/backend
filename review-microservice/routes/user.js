@@ -9,9 +9,7 @@ const router = Router();
 router.get("/:accessToken", jwtCheck, (req, res) => {
   const authHeader = `Bearer ${req.params.accessToken}`;
   const email = parseJwt(authHeader)["https://reviews-api.com/email"];
-  console.log(email);
   UserModel.findOne({ email: email })
-    .populate("likedReviewsId")
     .populate("votedModel")
     .then((result) => {
       if (!result) {
