@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.put("/:modelGroup/vote", jwtCheck, async (req, res) => {
+router.patch("/:modelGroup/vote", jwtCheck, async (req, res) => {
   const userEmail = parseJwt(req.headers.authorization)[
     "https://reviews-api.com/email"
   ];
@@ -49,7 +49,7 @@ router.put("/:modelGroup/vote", jwtCheck, async (req, res) => {
         return;
       }
       res.status(200).json({
-        message: "Handling PUT request to /modelGroup",
+        message: "Handling PATCH request to /modelGroup",
         updatedModelGroup: result,
       });
     });

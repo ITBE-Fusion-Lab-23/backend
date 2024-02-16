@@ -192,7 +192,7 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               example: Internal server error.
  *
  * /review/{reviewId}/likes/{operation}:
- *   put:
+ *   patch:
  *     summary: Changes the vote for the specified Review based on the operation specified.
  *     tags: [Review]
  *     parameters:
@@ -219,10 +219,10 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Handling PUT request to /review
+ *                   example: Handling PATCH request to /review
  *                 updatedReview:
  *                   type: object
- *                   $ref: '#components/schemas/Review'
+ *                   $ref: '#/components/schemas/Review'
  *       400:
  *         description: Bad request
  *         content:
@@ -256,7 +256,7 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *
  *
  * /modelGroup/{modelGroup}/vote:
- *   put:
+ *   patch:
  *     summary: Increments the vote for the specified modelGroup
  *     tags: [ModelGroup]
  *     parameters:
@@ -276,7 +276,7 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *               properties:
  *                  message:
  *                    type: string
- *                    example: Handling PUT request to /modelGroup
+ *                    example: Handling PATCH request to /modelGroup
  *                  updatedModelGroup:
  *                    type: object
  *                    $ref: '#/components/schemas/ModelGroup'

@@ -82,7 +82,7 @@ router.post(
   }
 );
 
-router.put("/:reviewId/likes/:operation", jwtCheck, async (req, res) => {
+router.patch("/:reviewId/likes/:operation", jwtCheck, async (req, res) => {
   let op;
   let mongoOpt;
   //determine to increment or decrement based on operation
@@ -118,11 +118,11 @@ router.put("/:reviewId/likes/:operation", jwtCheck, async (req, res) => {
           return;
         }
         res.status(200).json({
-          message: "Handling PUT request to /reviews",
+          message: "Handling PATCH request to /reviews",
           updatedReview: result,
         });
       });
-      //Handle PUT request to /user
+      //Handle PATCH request to /user
       const userEmail = parseJwt(req.headers.authorization)[
         "https://reviews-api.com/email"
       ];
@@ -139,23 +139,6 @@ router.put("/:reviewId/likes/:operation", jwtCheck, async (req, res) => {
           }
         });
       }
-    });
-  });
-});
-
-router.put("/:reviewId/removeLike", jwtCheck, async (req, res) => {
-  await ReviewModel.findOneAndUpdate(
-    { _id: new mongoose.Types.ObjectId(req.params.reviewId) },
-    { $inc: { likes: -1 } },
-    { new: true }
-  ).then((result) => {
-    if (!result) {
-      res.status(400).send("No reviews found with specified ID");
-      return;
-    }
-    res.status(200).json({
-      message: "Handling PUT request to /reviews",
-      updatedReview: result,
     });
   });
 });
