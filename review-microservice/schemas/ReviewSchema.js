@@ -245,6 +245,7 @@ export const ReviewModel = mongoose.model("Review", ReviewSchema);
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/ModelGroup'
+ *
  *       400:
  *         description: No object found with specified model group and component.
  *         content:

@@ -6,7 +6,7 @@ import rateLimit from "express-rate-limit";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { ModelGroupModel } from "./schemas/ModelSchema.js";
-import { options, auth0Config, jwtCheck } from "./config.js";
+import { options } from "./config.js";
 import modelGroupRouter from "./routes/modelGroup.js";
 import reviewRouter from "./routes/reviews.js";
 import userRouter from "./routes/user.js";
@@ -30,7 +30,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(apiLimiter);
 
 //add cors
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://10.162.246.145:5000", "http://localhost:5001"],
+    optionsSuccessStatus: 200, //For legacy browser support
+  })
+);
 // app.use(jwtCheck);
 
 // Swagger UI Express middleware for API Documentation
