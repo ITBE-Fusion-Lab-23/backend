@@ -2,25 +2,25 @@ import mongoose from "mongoose";
 import { Schema } from "mongoose";
 
 const ModelGroupSchema = new Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        immutable: true
-    },
-    modelGroup: {
-        type: String,
-        require:true,
-        enum: ['A','B','C','D','E'],
-        unique: true
-    },
-    votes: {
-        type: Number,
-        default: 0
-    }
-})
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    immutable: true,
+  },
+  modelGroup: {
+    type: String,
+    require: true,
+    enum: ["A", "B", "C", "D", "E"],
+    unique: true,
+  },
+  votes: {
+    type: Number,
+    default: 0,
+  },
+});
 
 // ModelGroupSchema.index({modelGroup: 1, bridgePart: 1}, {unique:true});
 
-export const ModelGroupModel = mongoose.model('ModelGroup',ModelGroupSchema);
+export const ModelGroupModel = mongoose.model("ModelGroup", ModelGroupSchema);
 
 /**
  * @swagger

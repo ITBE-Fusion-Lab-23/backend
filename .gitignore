@@ -142,3 +142,5 @@ review-data
 .vercel
 
 /review-microservice/api
+
+.DS_Store
