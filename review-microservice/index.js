@@ -12,19 +12,19 @@ import reviewRouter from "./routes/reviews.js";
 import userRouter from "./routes/user.js";
 import cors from "cors";
 import { UserModel } from "./schemas/UserSchema.js";
-import https from "https";
-import fs from "fs";
+// import https from "https";
+// import fs from "fs";
 
 const specs = swaggerJSDoc(options);
 
 //Create a new express app
 const app = express();
 
-const privateKey = fs.readFileSync("./key.pem", "utf8");
-const certificate = fs.readFileSync("./cert.pem", "utf8");
-const credentials = { key: privateKey, cert: certificate };
+// const privateKey = fs.readFileSync("./key.pem", "utf8");
+// const certificate = fs.readFileSync("./cert.pem", "utf8");
+// const credentials = { key: privateKey, cert: certificate };
 
-const httpsServer = https.createServer(credentials, app);
+// const httpsServer = https.createServer(credentials, app);
 
 //API rate limiter (20 requests per minute for each IP)
 const apiLimiter = rateLimit({
@@ -42,9 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   origin: ["https://10.162.246.145:5000", "http://localhost:5001"],
 //   optionsSuccessStatus: 200, //For legacy browser support
 // }
-app.use(
-  cors()
-);
+app.use(cors());
 // app.use(jwtCheck);
 
 // Swagger UI Express middleware for API Documentation
@@ -82,7 +80,7 @@ app.use("/modelGroup", modelGroupRouter);
 
 app.use("/user", userRouter);
 
-httpsServer.listen(3000, (err) => {
+app.listen(3000, (err) => {
   err
     ? console.log("Error in server setup.")
     : console.log("Server listening on Port", 3000);
