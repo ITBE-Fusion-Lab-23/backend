@@ -35,15 +35,10 @@ const apiLimiter = rateLimit({
 //Use bodyParser middleware to be able to parse request body data and apiLimiter to rate limit API requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(apiLimiter);
+app.use(apiLimiter);
 
 //add cors
-// {
-//   origin: ["https://10.162.246.145:5000", "http://localhost:5001"],
-//   optionsSuccessStatus: 200, //For legacy browser support
-// }
 app.use(cors());
-// app.use(jwtCheck);
 
 // Swagger UI Express middleware for API Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
