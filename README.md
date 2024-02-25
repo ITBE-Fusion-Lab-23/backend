@@ -16,9 +16,13 @@ git clone https://github.com/ITBE-Fusion-Lab-23/backend.git
 > The 3DCityDB folder does not contain the necessary files to display the contents correctly. The files are too large to be pushed inside a git repository.
 > For security reasons, the database secrets and connections string should not be placed inside a git repository. Therefore, these files are also available only in the submission folder.
 
-For the back end to run, the 3D CityDB data, database secrets and connection string has to be added to the correct directories.
+For the back end to run, the 3D CityDB data, database secrets, and connection string must be added to the correct directories.
 
-The folders "CityGMLData" and "pg-data" on the submission folder are to be put into the "3dcitydb" folder. The database secrets (mongodb_root_password.txt, mongodb_root_username.txt) has to be inserted into the review-db/secrets folder, and the .env file has to be available in the root folder.
+The folders "A_Submission_Folder/SoftwareDev/3D City DB Data/CityGMLData/" and "A_Submission_Folder/SoftwareDev/3D City DB Data/pg-data/" in the submission folder are to be put into the "backend/3dcitydb/" folder of the repository.
+
+The database secrets ("A_Submission_Folder/SoftwareDev/Backend Secrets/mongodb_root_password.txt" and "A_Submission_Folder/SoftwareDev/Backend Secrets/mongodb_root_username.txt") have to be inserted into the repository under "backend/review-db/secrets/".
+
+The submission file "A_Submission_Folder/SoftwareDev/Backend Secrets/.env" has to be made available in the repository's root folder "backend/".
 
 Submission folder structure:
 
