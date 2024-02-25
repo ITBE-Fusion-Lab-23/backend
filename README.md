@@ -3,8 +3,9 @@
 This is the repository storing the full backend server code for ITBE Fusion Lab Group A. It contains several folders including _3dcitydb_, _review-microservice_, and _review-db_.
 
 By running all the components together, you can have the backend running locally on your device.
+## Quickstart
 
-## Setup
+### Setup
 
 Clone this repository:
 ```
@@ -35,11 +36,7 @@ Submission folder structure:
 └── 
 ```
 
-
-
-## Quickstart
-
-For a fast and easy start, run:
+After all the files are correctly placed, run:
 
 ```
 docker compose up --build
