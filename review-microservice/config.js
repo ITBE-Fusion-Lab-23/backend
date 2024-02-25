@@ -27,9 +27,6 @@ export const options = {
       {
         url: "http://localhost:3000",
       },
-      {
-        url: "http://10.162.246.145:3000",
-      },
     ],
   },
   apis: ["./schemas/*.js"],
