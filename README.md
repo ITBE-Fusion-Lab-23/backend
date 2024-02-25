@@ -52,3 +52,7 @@ The spec.yaml file contains the Swagger Documentation of the Review-Microservice
 - [@Julian Gerstner](https://github.com/JulianLeQuack)
 
 Contact this [email](mailto:jeffrey.limnardy@tum.de) for more information about this repository.
+
+## License
+
+This repository is available under the MIT license. See the LICENSE file for more info.
