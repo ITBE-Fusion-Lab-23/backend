@@ -4,6 +4,11 @@ This is the repository storing the full backend server code for ITBE Fusion Lab 
 
 By running all the components together, you can have the backend running locally on your device.
 
+## Setup
+
+For the back end to run, the MongoDB and 3D CityDB data has to be added to the correct directories.
+The folders "CityGMLData" and "pg-data" on SyncAndShare are to be put into the "3dcitydb" folder.
+
 ## Quickstart
 
 For a fast and easy start, run:
