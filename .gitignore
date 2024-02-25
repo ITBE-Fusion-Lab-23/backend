@@ -133,10 +133,10 @@ dist
 review-data
 
 #ignore pg-data data
-./3dcitydb/pg-data/
+/3dcitydb/pg-data/
 
 #ignore CityGMLData
-./3dcitydb/CityGMLData/
+/3dcitydb/CityGMLData/
 
 #ignore vercel deployment folder
 .vercel
