@@ -10,7 +10,7 @@ export const options = {
   definition: {
     openapi: "3.1.0",
     info: {
-      title: "Neue Donnersbergerbruecke API with Swagger",
+      title: "ITBE Fusion Lab Group A API with Swagger",
       version: "0.1.0",
       description:
         "This is a simple CRUD API application made with Express and documented with Swagger",
@@ -19,14 +19,16 @@ export const options = {
         url: "https://spdx.org/licenses/MIT.html",
       },
       contact: {
-        name: "Neue Donnersbergerbruecke",
-        url: "https://google.com", //placeholder
-        email: "info@email.com",
+        name: "Jeffrey Limnardy",
+        email: "jeffrey.limnardy@tum.de",
       },
     },
     servers: [
       {
         url: "http://localhost:3000",
+      },
+      {
+        url: "http://10.162.246.145:3000",
       },
     ],
   },

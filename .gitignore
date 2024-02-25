@@ -144,3 +144,7 @@ review-data
 /review-microservice/api
 
 .DS_Store
+
+mock-frontend
+
+*.pem
