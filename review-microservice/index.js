@@ -70,6 +70,20 @@ await ModelGroupModel.createCollection();
 //Create collection for users
 await UserModel.createCollection();
 
+//Initialize database with 5 model groups
+await ModelGroupModel.findOne({}).then((result) => {
+  if (result) return;
+  ModelGroupModel.insertMany([
+    { modelGroup: "A", votes: 0 },
+    { modelGroup: "B", votes: 0 },
+    { modelGroup: "C", votes: 0 },
+    { modelGroup: "D", votes: 0 },
+    { modelGroup: "E", votes: 0 },
+  ]).then(() => {
+    console.log("Database Initialized");
+  });
+});
+
 app.get("/", (_, res) => {
   res.send("App is working!");
 });
